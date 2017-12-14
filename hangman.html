@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+	<html lang="en-us">
+
+	<head>
+		<title>Hangman!</title>
+		<link rel="stylesheet" type="text/css" href="assets/css/normalize.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
+
+	</head>
+	<body>
+		
+		<header></header>
+
+		
+
+		
+		<div class="scoreboard panel panel-default col-xs-8 col-xs-offset-2">
+
+			<div class="panel-heading col-xs-12" id="margin1">Hangman!</div>
+	
+			<div class="wordArea panel-body">
+					<div class="row">
+					<ul class="lettersArea" id="lettersAreaId">
+						<li class="letters" id="letter0">P</li>
+						<li class="letters" id="letter1">R</li>
+						<li class="letters" id="letter2">E</li>
+						<li class="letters" id="letter3">S</li>
+						<li class="letters" id="letter4">S</li>
+						<li class="letters" id="letter5">_</li>
+						<li class="letters" id="letter6">N</li>
+						<li class="letters" id="letter7">E</li>
+						<li class="letters" id="letter8">W</li>
+						<li class="letters" id="letter9">_</li>
+						<li class="letters" id="letter10">G</li>
+						<li class="letters" id="letter11">A</li>
+						<li class="letters" id="letter12">M</li>
+						<li class="letters" id="letter13">E</li>
+					</ul>
+					</div>
+				
+				<div class="row">
+					<div class="col-xs-5 col-xs-offset-1">
+
+						<div class="guessesRemaining panel-body">
+								<h2>Guesses Remaining</h2>
+								<p id="numberRemaining">10</p>
+						</div>
+
+
+						<div class="guessedArea panel-body">
+							<h2>Letters Guessed:</h2>
+							<p id="lettersGuessed"></p>
+						</div>
+					</div>
+
+					<div class="col-xs-3">
+						<img src="assets/images/hangmanImage.png" id="image1">
+
+						<button type="button" onclick="gameReset();">New Game</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		
+	</body>
+
+	<script type="text/javascript">	
+
+		var untilGameOver = 10;
+		var lettersGuessedArray = [];
+		var winner = [];
+		var newLetter = "_";
+		var possibleLetters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+
+		var word = [" ", " "];
+
+		var word0 = ["t", "i", "g", "e", "r"];
+		var word1 = ["l", "i", "o", "n"];
+		var word2 = ["l", "e", "o", "p", "a", "r", "d"];
+		var word3 = ["h", "y", "e", "n", "a"];
+
+
+		
+		document.onkeyup = function letterWriter(userGuess) {
+			var userGuess = event.key;
+
+			if (possibleLetters.indexOf(userGuess) > -1) {
+
+				for (var i = 0; i < word.length; i++) { //steps through the word looking for a match
+						
+					if ((userGuess === word[i]) && (winner.indexOf(userGuess) === -1)) { //cheks to see if your guess matches a letter in the word.
+						var idNumber1 = "letter" + i; //idNumber is the name of the id to overwrite. the ids are letter0, letter1 etc...
+						document.getElementById(idNumber1).innerHTML = userGuess; //userGuess is written to the page in place of a blank _
+						winner.push(userGuess) // pushes into an array which checks to see if you win or not.
+						} 
+					}
+
+				if ((word.indexOf(userGuess) === -1) && (lettersGuessedArray.indexOf(userGuess) === -1)) { //this section subracts one for a wrong guess and adds the wrong letter to the letters guessed section.
+					untilGameOver -= 1;
+					document.getElementById("numberRemaining").innerHTML = untilGameOver; //counts down wrong guesses and writes the result to the webpage.
+					lettersGuessedArray.push(userGuess)	
+					document.getElementById("lettersGuessed").innerHTML = lettersGuessedArray; /*adds to the ist of letters used. The and statement at the top checks to make sure you don't get penalized for guessing the same letter twice. writes wrong guesses to the webpage */
+					}
+
+				for (var i = 0; i < word.length; i++) {
+						var idNumber5 = eval(untilGameOver)
+						document.getElementById("image1").src = "assets/images/hangmanImage" + idNumber5 + ".png";
+						console.log(idNumber5);
+				}
+
+				if ((untilGameOver > 0) && (winner.length === word.length)) { // checks to see if you win.
+					alert("You win! This man has been saved by your wit!")
+				}
+
+				if (untilGameOver < 1) {
+					alert("Game Over! You failed to save this man from being hanged.") // lets you know you are a LOSER!
+				}
+			}
+		}
+
+		
+		function gameReset() {
+			untilGameOver = 10;
+			document.getElementById("numberRemaining").innerHTML = untilGameOver;
+			lettersGuessedArray.length = 0;
+			document.getElementById("lettersGuessed").innerHTML = lettersGuessedArray;
+			winner.length = 0;
+			document.getElementById("image1").src = "assets/images/hangmanImage10.png";
+
+			function wordSelect() {
+				var randomNumber = Math.floor(Math.random() * 4);
+				var wordNumber = "word" + eval(randomNumber);
+				word = eval(wordNumber);
+				console.log(word);
+			}
+			
+			wordSelect();
+			
+			for (var i = 0; i < word.length; i++) {
+				var idNumber2 = "letter" + eval(i); //idNumber is the name of the id to overwrite. the ids are letter0, letter1 etc...
+				document.getElementById(idNumber2).innerHTML = newLetter;
+			}
+
+			for (var i = word.length; i < 14; i++) {
+				var idNumber3 = "letter" + eval(i);
+				console.log(idNumber3);
+				document.getElementById(idNumber3).style.visibility = "hidden";
+			}	
+
+			for (var i = 0; i < word.length; i++) {
+				var idNumber4 = "letter" + eval(i);
+				console.log(idNumber4);
+				document.getElementById(idNumber4).style.visibility = "visible";
+			}
+
+		}
+
+	</script>
+
+</html>
